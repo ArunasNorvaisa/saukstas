@@ -10,10 +10,12 @@ export default class Search {
         const url = `https://cors-anywhere.herokuapp.com
                     https://www.food2fork.com/api/search
                     ?key=${key}&q=${this.query}`;*/
-        const url = 'https://my-json-server.typicode.com/ArunasNorvaisa/saukstas'
+        const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/db.json'
         try {
             const res = await axios(url);
+            console.log('res', res);
             this.result = res.data.recipes;
+            console.log(this.result);
         } catch(error) {
             alert(error);
         };
