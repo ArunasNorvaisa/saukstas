@@ -6,6 +6,7 @@ export const clearInput = () => { elements.searchInput.value = ''; };
 
 export const clearPreviousResults = () => {
     elements.searchResList.innerHTML = '';
+    elements.searchResPages.innerHTML = '';
 };
 
 // We're cutting the title to the desired length so it will take one line only
@@ -18,7 +19,6 @@ const limitRecipeTitleLength = (title, limit = 17) => {
             }
             return acc + cur.length;
         }, 0);
-        console.log('newTitle:', newTitle)
         return `${newTitle.join(' ')}...`;
     }
     return title;
@@ -41,6 +41,40 @@ const renderRecipe = recipe => {
     elements.searchResList.insertAdjacentHTML('beforeend', html);
 };
 
-export const renderResults = recipes => {
-    recipes.forEach(renderRecipe);
+const createPaginationButton = (page, type) => {
+    return `<button
+    class="btn-inline results__btn--${type}"
+    data-goto=${type === 'prev' ? page - 1 : page + 1}>
+        <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}">
+            </use>
+        </svg>
+    </button>`;
+};
+
+const renderPaginationButtons = (page, numberOfResults, resultsPerPage) => {
+    const pages = Math.ceil(numberOfResults / resultsPerPage);
+    let button;
+    if(page === 1 && pages > 1) {
+        //Only button to go to the next page
+        button = createPaginationButton(page, 'next');
+    } else if(page < pages) {
+        //Buttons to go to the previous/next page
+        button = `
+            ${createPaginationButton(page, 'prev')}
+            ${createPaginationButton(page, 'next')}
+        `;
+    } else if(page === pages && pages > 1) {
+        //Only button to go to the previous page
+        button = createPaginationButton(page, 'prev');
+    }
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+};
+
+export const renderResults = (recipes, page = 1, resultsPerPage = 10) => {
+    const start = (page - 1) * resultsPerPage;
+    const end = page * resultsPerPage;
+    recipes.slice(start, end).forEach(renderRecipe);
+    renderPaginationButtons(page, recipes.length, resultsPerPage);
 }
