@@ -41,12 +41,6 @@ const renderRecipe = recipe => {
     elements.searchResList.insertAdjacentHTML('beforeend', html);
 };
 
-<<<<<<< HEAD
-export const renderResults = recipes => {
-    recipes.forEach(renderRecipe);
-};
-
-=======
 const createPaginationButton = (page, type) => {
     return `<button
     class="btn-inline results__btn--${type}"
@@ -83,5 +77,5 @@ export const renderResults = (recipes, page = 1, resultsPerPage = 10) => {
     const end = page * resultsPerPage;
     recipes.slice(start, end).forEach(renderRecipe);
     renderPaginationButtons(page, recipes.length, resultsPerPage);
-}
->>>>>>> 7f881afbabf8895922e111300ecf99e14fc9739d
+};
+
