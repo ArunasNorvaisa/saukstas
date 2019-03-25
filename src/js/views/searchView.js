@@ -8,6 +8,7 @@ export const clearPreviousResults = () => {
     elements.searchResList.innerHTML = '';
 };
 
+// We're cutting the title to the desired length so it will take one line only
 const limitRecipeTitleLength = (title, limit = 17) => {
     const newTitle = [];
     if(title.length > limit) {
