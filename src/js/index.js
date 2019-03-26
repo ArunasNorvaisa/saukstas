@@ -1,6 +1,7 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
-import * as searchView from './views/searchView';
+import * as searchView from "./views/searchView";
+import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 /**
@@ -26,8 +27,8 @@ const controlSearch = async () => {
         searchView.clearInput();
         searchView.clearPreviousResults();
         renderLoader(elements.searchRes);
-        
-        try {            
+
+        try {
             // 4. Search for recipes
             await state.search.getResults();
             // 5. Render results to UI
@@ -65,10 +66,13 @@ const controlRecipe = async () => {
     let id = window.location.hash.replace("#", "");
     if(id) {
         //Prepare UI for changes
+        recipeView.clearRecipe();
+        renderLoader(elements.recipe);
+
         //Create new Recipe object
         state.recipe = new Recipe(id);
 
-        try {            
+        try {
             //Get recipe data
             await state.recipe.getRecipe();
             state.recipe.parseIngredients();
@@ -78,9 +82,11 @@ const controlRecipe = async () => {
             state.recipe.calcServings();
 
             //Render the recipe
-            console.log(state.recipe);
+            clearLoader();
+            recipeView.renderRecipe(state.recipe);
+
         } catch(error) {
-            alert("An error occurred while proceessing your recipe query");
+            alert(error);
         }
     }
 };
@@ -91,5 +97,5 @@ const controlRecipe = async () => {
 //the window.load event (for example if user has bookmarked page)
 //window.addEventListener("load", controlRecipe);
 
-//Instead of 2 lines of code above we have one below:
+//Instead of 2 lines of code above we can have one below:
 ["hashchange", "load"].forEach(event => window.addEventListener(event, controlRecipe));

@@ -5,7 +5,7 @@ export default class Recipe {
     constructor(id) {
         this.id = id;
     }
-    
+
     async getRecipe() {
         //const url = `${proxy}https://www.food2fork.com/api/get?key=${key}&rId=${this.id}`;
         const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/recipe.json';
@@ -20,7 +20,7 @@ export default class Recipe {
             console.log(error);
         };
     }
- 
+
     //We calculate cooking time, making rather VERY shallow
     //estimate that for every 3 ingredients we need 15 minutes
     calcTime() {
@@ -28,12 +28,12 @@ export default class Recipe {
         const periods = Math.ceil(numberOfIngredients / 3);
         this.time = periods * 15;
     }
-    
+
     //Again, we shallowly assume that every recipe has 4 servings
     calcServings() {
         this.servings = 4;
     }
-    
+
     parseIngredients() {
         const newIngredients = this.ingredients.map(el => {
             //Units to convert FROM
@@ -58,6 +58,7 @@ export default class Recipe {
                 'cup',
                 'pound'
             ];
+            const units = [...unitsShort, 'kg', 'g'];
             //1. Uniform units
             let ingredient = el.toLowerCase();
             //We replace any string from unitsLong with it's
@@ -65,26 +66,26 @@ export default class Recipe {
             unitsLong.forEach((unit, i) => {
                 ingredient = ingredient.replace(unit, unitsShort[i]);
             });
-            
+
             //2. Remove parentheses
             //copied from https://stackoverflow.com/questions/4292468/
             ingredient = ingredient.replace(/ *\([^)]*\) */g, " ");
-            
+
             //3. Parse units, count and ingredient
             //First, we're splitting ingr. list into an array
             const ingredientsArray = ingredient.split(' ');
             //Now we loop through ingredientsArray looking if anything
-            //from unitsShort is there and returning it's index, if there            
+            //from units/unitsShort is there and returning it's index, if there
             //Example '4 1/2 cups of coffee' returns 2
             //(new stuff from ES7/8 - exiting!!!   :P )
-            const unitIndex = ingredientsArray.findIndex(element => unitsShort.includes(element));
-            
+            const unitIndex = ingredientsArray.findIndex(element => units.includes(element));
+
             let objIngredients;
             if(unitIndex > -1) {
                 //There are units
-                
+
                 //following line returns [4, 1/2] from '4 1/2 cups of coffee':
-                const arrCount = ingredientsArray.slice(0, unitIndex);                
+                const arrCount = ingredientsArray.slice(0, unitIndex);
                 let count;
                 if(arrCount.length === 1) {//If ingr. list only has 1 number
                     count = ingredientsArray[0]; // => 4
@@ -104,7 +105,7 @@ export default class Recipe {
                     count: parseInt(ingredientsArray[0], 10),
                     unit: '',
                     ingredient: ingredientsArray.slice(1).join(' ')
-                };                
+                };
             } else if(unitIndex === -1) {
                 //There is no unit or number in first position
                 objIngredients = {
@@ -113,8 +114,8 @@ export default class Recipe {
                     ingredient: ingredient
                 };
             }
-            
-            return objIngredients;            
+
+            return objIngredients;
         });
         this.ingredients = newIngredients;
     }
