@@ -7,9 +7,7 @@ export default class Search {
     }
 
     async getResults() {
-/*        const url = `${proxy}
-                    https://www.food2fork.com/api/search
-                    ?key=${key}&q=${this.query}`;*/
+        //const url = `${proxy}https://www.food2fork.com/api/search?key=${key}&q=${this.query}`;
         const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/db.json'
         try {
             const res = await axios(url);

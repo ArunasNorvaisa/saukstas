@@ -8,7 +8,7 @@ export default class Recipe {
     
     async getRecipe() {
         //const url = `${proxy}https://www.food2fork.com/api/get?key=${key}&rId=${this.id}`;
-        //const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/recipe.json';
+        const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/recipe.json';
         try {
             const res = await axios(url);
             this.title = res.data.recipe.title;

@@ -26,11 +26,17 @@ const controlSearch = async () => {
         searchView.clearInput();
         searchView.clearPreviousResults();
         renderLoader(elements.searchRes);
-        // 4. Search for recipes
-        await state.search.getResults();
-        // 5. Render results to UI
-        clearLoader();
-        searchView.renderResults(state.search.result);
+        
+        try {            
+            // 4. Search for recipes
+            await state.search.getResults();
+            // 5. Render results to UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+        } catch(error) {
+            alert("Somwething went wrong with the search.");
+            clearLoader();
+        }
 
     }
 };
@@ -54,5 +60,35 @@ elements.searchResPages.addEventListener('click', event => {
 /**
 * RECIPE CONTROLLER
 */
-const r = new Recipe(123);
-r.getRecipe();
+const controlRecipe = async () => {
+    //We are getting ID from URL and removing # from it
+    let id = window.location.hash.replace("#", "");
+    if(id) {
+        //Prepare UI for changes
+        //Create new Recipe object
+        state.recipe = new Recipe(id);
+
+        try {            
+            //Get recipe data
+            await state.recipe.getRecipe();
+
+            //Calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+
+            //Render the recipe
+            console.log(state.recipe);
+        } catch(error) {
+            alert("An error occurred while proceessing your recipe query");
+        }
+    }
+};
+
+//We are getting new recipe whenever new hash is detected in URL
+//window.addEventListener("hashchange", controlRecipe);
+//We are getting recipe whenever hash is detected in URL during
+//the window.load event (for example if user has bookmarked page)
+//window.addEventListener("load", controlRecipe);
+
+//Instead of 2 lines of code above we have one below:
+["hashchange", "load"].forEach(event => window.addEventListener(event, controlRecipe));
