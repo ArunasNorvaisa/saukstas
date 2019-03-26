@@ -39,7 +39,8 @@ elements.searchForm.addEventListener('submit', e => {
 elements.searchResPages.addEventListener('click', event => {
     const button = event.target.closest('.btn-inline');
     if(button) {
-        //dataset.goto is the data-goto attribute of the <button> (see html)
+        //dataset.goto is the data-goto attribute of the <button>
+        //(see html in views/searchView.js createPaginationButton())
         const goToPage = parseInt(button.dataset.goto, 10);
         searchView.clearPreviousResults();
         searchView.renderResults(state.search.result, goToPage);
