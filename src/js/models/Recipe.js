@@ -7,16 +7,30 @@ export default class Recipe {
     }
     
     async getRecipe() {
-/*        const url = `${proxy}
-                    https://www.food2fork.com/api/get
-                    ?key=${key}&q=${this.id}`;*/
-        const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/db.json'
+        //const url = `${proxy}https://www.food2fork.com/api/get?key=${key}&rId=${this.id}`;
+        //const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/recipe.json';
         try {
             const res = await axios(url);
-            this.result = res.data.recipes;
+            this.title = res.data.recipe.title;
+            this.author = res.data.recipe.publisher;
+            this.img = res.data.recipe.image_url;
+            this.url = res.data.recipe.source_url;
+            this.ingredients = res.data.recipe.ingredients;
         } catch(error) {
             console.log(error);
         };
     }
+ 
+    //We calculate cooking time, making rather VERY shallow
+    //estimate that for every 3 ingredients we need 15 minutes
+    calcTime() {
+        const numberOfIngredients = this.ingredients.length;
+        const periods = Math.ceil(numberOfIngredients / 3);
+        this.time = periods * 15;
+    }
+    
+    //Again, we shallowly assume that every recipe has 4 servings
+    calcServings() {
+        this.servings = 4;
     }
 }
