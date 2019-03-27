@@ -11,11 +11,12 @@ export default class Recipe {
         const url = 'https://raw.githubusercontent.com/ArunasNorvaisa/saukstas/master/recipe.json';
         try {
             const res = await axios(url);
-            this.title = res.data.recipe.title;
-            this.author = res.data.recipe.publisher;
-            this.img = res.data.recipe.image_url;
-            this.url = res.data.recipe.source_url;
-            this.ingredients = res.data.recipe.ingredients;
+            const { title, publisher, image_url, source_url, ingredients } = res.data.recipe;
+            this.title = title;
+            this.author = publisher;
+            this.img = image_url;
+            this.url = source_url;
+            this.ingredients = ingredients;
         } catch(error) {
             console.log(error);
         };
@@ -67,7 +68,7 @@ export default class Recipe {
                 ingredient = ingredient.replace(unit, unitsShort[i]);
             });
 
-            //2. Remove parentheses
+            //2. Remove parentheses and everything in between them
             //copied from https://stackoverflow.com/questions/4292468/
             ingredient = ingredient.replace(/ *\([^)]*\) */g, " ");
 
@@ -92,7 +93,7 @@ export default class Recipe {
                     //Sometimes API begins w/ smthg like '1-1/2 teaspoons', so:
                     count = eval(count.replace("-", "+"));
                 } else {
-                    count = eval(arrCount.join('+')); // 4 + 1/2 = 5;
+                    count = eval(arrCount.join('+')); // 4 + 1/2 = 4.5;
                 }
                 objIngredients = {
                     count: count,

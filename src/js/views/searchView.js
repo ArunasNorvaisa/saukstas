@@ -9,6 +9,18 @@ export const clearPreviousResults = () => {
     elements.searchResPages.innerHTML = '';
 };
 
+//We are highlighting an active search result
+export const highlightSelected = id => {
+    //First, we make an array from all search results
+    const resultsArray = Array.from(document.querySelectorAll('.results__link'));
+    //Then, we remove an 'active' class - if found
+    resultsArray.forEach(el => {
+        el.classList.remove('results__link--active');
+    });
+    //Last, we add an 'active' class to the selected id
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+};
+
 // We're cutting the title to the desired length so it will take one line only
 const limitRecipeTitleLength = (title, limit = 17) => {
     const newTitle = [];
@@ -23,6 +35,7 @@ const limitRecipeTitleLength = (title, limit = 17) => {
     }
     return title;
 };
+
 
 const renderRecipe = recipe => {
     const html = `

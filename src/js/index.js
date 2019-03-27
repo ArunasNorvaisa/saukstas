@@ -35,7 +35,7 @@ const controlSearch = async () => {
             clearLoader();
             searchView.renderResults(state.search.result);
         } catch(error) {
-            alert("Somwething went wrong with the search.");
+            alert("Something went wrong with the search.");
             clearLoader();
         }
 
@@ -68,6 +68,11 @@ const controlRecipe = async () => {
         //Prepare UI for changes
         recipeView.clearRecipe();
         renderLoader(elements.recipe);
+        
+        //Highlight selected item
+        if(state.search) {
+            searchView.highlightSelected(id);
+        }
 
         //Create new Recipe object
         state.recipe = new Recipe(id);
