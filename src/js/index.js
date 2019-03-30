@@ -3,6 +3,7 @@ import Recipe from './models/Recipe';
 import List from './models/List';
 import * as searchView from "./views/searchView";
 import * as recipeView from './views/recipeView';
+import * as listView from './views/listView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 /**
@@ -118,10 +119,39 @@ elements.recipe.addEventListener('click', e => {
         //'increase' button is clicked
         state.recipe.updateServings('inc');
         recipeView.updateServingsIngredients(state.recipe);
+    } else if(e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+        //Now, we handle adding to favourites
+        controlList();
     }
 });
 
 /**
 * FOVORITE LIST CONTROLLER
 */
-window.l = new List();
+const controlList = () => {
+    //Create new list, if there is none yet
+    if(!state.list) state.list = new List();
+    
+    //Add each ingredient into the list and UI
+    state.recipe.ingredients.forEach(el => {
+        const item = state.list.addItem(el.count, el.unit, el.ingredient);
+        listView.renderItem(item);
+    });
+};
+
+//Handle delete and update list items
+elements.shopping.addEventListener('click', e => {
+    const id = e.target.closest('.shopping__item').dataset.itemid;
+    //Handling delete event
+    if(e.target.matches('.shopping__delete, .shopping__delete *')) {
+        //delete from state
+        state.list.deleteItem(id);
+        //delete from UI
+        listView.deleteItem(id);
+    } else if(e.target.matches('.shopping__count--value')) {
+        //handle count update
+        const val = parseFloat(e.target.value);
+        state.list.updateCount(id, val);
+    }
+    
+});
