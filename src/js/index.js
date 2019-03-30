@@ -104,3 +104,18 @@ const controlRecipe = async () => {
 
 //Instead of 2 lines of code above we can have one below:
 ["hashchange", "load"].forEach(event => window.addEventListener(event, controlRecipe));
+
+//Handling recipe button clicks
+elements.recipe.addEventListener('click', e => {
+    if(e.target.matches('.btn-decrease, .btn-decrease *')) {
+        //'decrease' button is clicked and servings >= 1
+        if(state.recipe.servings > 1) {
+            state.recipe.updateServings('dec');
+            recipeView.updateServingsIngredients(state.recipe);
+        }
+    } else if(e.target.matches('.btn-increase, .btn-increase *')) {
+        //'increase' button is clicked
+        state.recipe.updateServings('inc');
+        recipeView.updateServingsIngredients(state.recipe);
+    }
+});

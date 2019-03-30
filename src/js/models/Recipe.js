@@ -59,7 +59,7 @@ export default class Recipe {
                 'cup',
                 'pound'
             ];
-            const units = [...unitsShort, 'kg', 'g'];
+            const units = [...unitsShort, 'kg', 'g', 'ml'];
             //1. Uniform units
             let ingredient = el.toLowerCase();
             //We replace any string from unitsLong with it's
@@ -119,5 +119,16 @@ export default class Recipe {
             return objIngredients;
         });
         this.ingredients = newIngredients;
+    }
+    
+    updateServings(type) {
+        //Update servings
+        const newServings = type === 'inc' ? this.servings + 1 : this.servings - 1;
+        this.ingredients.forEach(ing => {
+            ing.count *= (newServings / this.servings);
+        })
+        
+        //Update ingredients
+        this.servings = newServings;
     }
 }
