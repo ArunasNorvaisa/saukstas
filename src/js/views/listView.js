@@ -10,9 +10,7 @@ export const renderItem = item => {
         />
         <p>${item.unit}</p>
         ` :
-        `<input disabled />
-        <p>${item.unit}</p>
-        `;
+        ``;
     const html = `
         <li class="shopping__item" data-itemid=${item.id}>
             <div class="shopping__count">
