@@ -10,7 +10,7 @@
 /build
 
 # misc
-/dist/
+/dist/js/
 package-lock.json
 .DS_Store
 .env
