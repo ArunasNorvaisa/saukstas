@@ -18,7 +18,7 @@ export const highlightSelected = id => {
         el.classList.remove('results__link--active');
     });
     //Last, we add an 'active' class to the selected id
-    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href="#${id}"]`).classList.add('results__link--active');
 };
 
 // We're cutting the title to the desired length so it will take one line only

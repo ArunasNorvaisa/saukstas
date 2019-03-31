@@ -5,7 +5,7 @@ import Likes from './models/Likes';
 import * as searchView from "./views/searchView";
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
-//import * as likesView from './views/likesView';
+import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 /**
@@ -92,7 +92,10 @@ const controlRecipe = async () => {
 
             //Render the recipe
             clearLoader();
-            recipeView.renderRecipe(state.recipe);
+            recipeView.renderRecipe(
+                state.recipe,
+                state.likes.isLiked(id)
+            );
 
         } catch(error) {
             alert(error);
@@ -164,6 +167,7 @@ elements.shopping.addEventListener('click', e => {
 /**
 * LIKES CONTROLLER
 */
+state.likes = new Likes(); // JUST FOR TESTING
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
     const currentID = state.recipe.id;
@@ -176,15 +180,21 @@ const controlLike = () => {
             state.recipe.img
         );
         
-        //Toggle the LIKE button view
+        //Toggle the LIKE button view style
+        likesView.toggleLikeBtn(true);
         
-        //Add like to the UI        
+        //Add like to the UI
+        likesView.renderLike(newLike);
     } else {
         //Remove like from the state
         state.likes.deleteLike(currentID);
         
-        //Toggle the LIKE button view
+        //Toggle the LIKE button view style
+        likesView.toggleLikeBtn(false);
         
         //Remove like from the UI
+        likesView.deleteLike(currentID);
     }
+    //Handling HEART icon visibility depending on are there likes or not
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
